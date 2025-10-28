@@ -1,0 +1,53 @@
+// Lista Ligada 
+
+// Classe nó 
+
+public class No {
+    // Atributo para armazenar o dado (usando int como exemplo)
+    public int dado;
+    
+    // Referência para o próximo nó da lista
+    public No proximo;
+    
+    // Construtor padrão
+    public No() {
+        this.dado = 0;
+        this.proximo = null;
+    }
+    
+    // Construtor com apenas o dado
+    public No(int dado) {
+        this.dado = dado;
+        this.proximo = null;
+    }
+    
+    // Construtor completo
+    public No(int dado, No proximo) {
+        this.dado = dado;
+        this.proximo = proximo;
+    }
+    
+    // Getters e Setters (opcional, mas recomendado para encapsulamento)
+    public int getDado() {
+        return dado;
+    }
+    
+    public void setDado(int dado) {
+        this.dado = dado;
+    }
+    
+    public No getProximo() {
+        return proximo;
+    }
+    
+    public void setProximo(No proximo) {
+        this.proximo = proximo;
+    }
+    
+    // Método toString para representação em string
+    @Override
+    public String toString() {
+        return "No{" + "dado=" + dado + ", proximo=" + 
+               (proximo != null ? proximo.dado : "null") + '}';
+    }
+}
