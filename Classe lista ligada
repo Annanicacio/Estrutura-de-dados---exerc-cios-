@@ -1,0 +1,34 @@
+// Classe Lista Ligada 
+
+public class ListaLigada {
+
+    private No primeiro;
+   
+    public ListaLigada() {
+        this.primeiro = null;
+    }
+    
+    public boolean estaVazia() {
+        return primeiro == null;
+    }
+    
+    public void inserirInicio(int dado) {
+        No novoNo = new No(dado);
+        novoNo.setProximo(primeiro);
+        primeiro = novoNo;
+    }
+    
+    public void exibir() {
+        if (estaVazia()) {
+            System.out.println("Lista vazia!");
+            return;
+        }
+        
+        No atual = primeiro;
+        while (atual != null) {
+            System.out.print(atual.getDado() + " -> ");
+            atual = atual.getProximo();
+        }
+        System.out.println("null");
+    }
+}
