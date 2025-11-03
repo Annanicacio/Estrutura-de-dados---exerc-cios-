@@ -1,0 +1,432 @@
+// alguns exercicios 
+
+exercício 6. 
+
+Implementar buscar(int chave): Crie um método public No buscar(int chave) que
+percorra a lista e retorne o nó que contém o valor da chave. Se não encontrar, deve
+retornar null
+
+```java
+public No buscar(int chave) {
+    // PASSO 1: Começar do primeiro nó
+    No atual = primeiro;
+    
+    // PASSO 2: Percorrer toda a lista
+    while (atual != null) {
+        // PASSO 3: Verificar se encontramos a chave
+        if (atual.dado == chave) {
+            return atual;  // Encontrou! Retorna o nó
+        }
+        
+        // PASSO 4: Ir para o próximo nó
+        atual = atual.proximo;
+    }
+    
+    // PASSO 5: Se chegou aqui, não encontrou
+    return null;
+}
+```
+
+exercício 7. 
+
+Implementar remover(int chave): Crie um método public No remover(int chave)
+que busque por um nó com a chave informada e o remova da lista, religando o nó
+anterior ao nó posterior. Retorne o nó removido ou null se não for encontrado.
+(Atenção: este é mais complexo que removerDoInicio())
+
+```java
+public No remover(int chave) {
+    // Lista vazia
+    if (primeiro == null) {
+        return null;
+    }
+    
+    // Usamos dois ponteiros: anterior e atual
+    No anterior = null;
+    No atual = primeiro;
+    
+    while (atual != null) {
+        if (atual.dado == chave) {
+            // ENCONTROU! Vamos remover
+            if (anterior == null) {
+                // Estamos no primeiro nó
+                primeiro = atual.proximo;
+            } else {
+                // Estamos no meio ou fim
+                anterior.proximo = atual.proximo;
+            }
+            return atual;
+        }
+        // Avança para o próximo
+        anterior = atual;
+        atual = atual.proximo;
+    }
+    
+    // Não encontrou
+    return null;
+}
+```
+
+exercício 8. 
+
+Adicionar Referência ao ultimo: Modifique a sua classe ListaLigada para incluir
+uma referência ao último nó (private No ultimo), transformando-a numa lista com
+extremidade dupla. Atualize o construtor e os métodos de inserção/remoção para
+manter esta referência correta.
+
+```java
+public class ListaLigada {
+    private No primeiro;
+    private No ultimo;  //  NOVA referência ao último nó
+    
+    // Construtor atualizado
+    public ListaLigada() {
+        this.primeiro = null;
+        this.ultimo = null;  // Inicializa ultimo como null
+    }
+}
+
+// Inserir no inicio 
+public void inserirNoInicio(int dado) {
+    No novoNo = new No(dado);
+    
+    if (primeiro == null) {
+        // Lista vazia: primeiro E último apontam para o novo nó
+        primeiro = novoNo;
+        ultimo = novoNo;
+    } else {
+        // Lista não vazia
+        novoNo.proximo = primeiro;
+        primeiro = novoNo;
+    }
+}
+
+// remover do inicio 
+public No removerDoInicio() {
+    if (primeiro == null) {
+        return null;
+    }
+    
+    No removido = primeiro;
+    
+    if (primeiro == ultimo) {
+        // Só tinha um elemento
+        primeiro = null;
+        ultimo = null;
+    } else {
+        primeiro = primeiro.proximo;
+    }
+    
+    return removido;
+}
+```
+
+exercício 9.
+
+Implementar inserirNoFim(): Usando a referência ultimo do exercício anterior, crie
+um método public void inserirNoFim(int dado) que adicione um novo nó no final da
+lista em tempo O(1)
+
+```java
+public void inserirNoFim(int dado) {
+    No novoNo = new No(dado);  // Cria o novo nó
+    
+    if (primeiro == null) {
+        // Lista vazia: primeiro E último apontam para o novo nó
+        primeiro = novoNo;
+        ultimo = novoNo;
+    } else {
+        // Lista não vazia: insere no fim em O(1)
+        ultimo.proximo = novoNo;  // Último atual aponta para o novo
+        ultimo = novoNo;          // Atualiza último para ser o novo nó
+    }
+}
+```
+
+exercicio 10. 
+
+Implementar ListaDuplamenteLigada: Crie uma nova estrutura de dados
+ListaDuplamenteLigada. Para isso, a classe No deverá ter uma referência para o
+nó anterior e para o proximo. Implemente os métodos inserirNoInicio() e
+mostrarDoInicio().
+
+```java
+//classe No na lista ligada, coloquei "No duplo"
+
+public class NoDuplo {
+    public int dado;
+    public NoDuplo anterior;  // ⭐ NOVO: aponta para o nó ANTERIOR
+    public NoDuplo proximo;   // Aponta para o nó PRÓXIMO
+    
+    public NoDuplo(int dado) {
+        this.dado = dado;
+        this.anterior = null;
+        this.proximo = null;
+    }
+}
+
+// classe listaDuplamenteLigada 
+
+public class ListaDuplamenteLigada {
+    private NoDuplo primeiro;
+    private NoDuplo ultimo;
+    
+    public ListaDuplamenteLigada() {
+        this.primeiro = null;
+        this.ultimo = null;
+    }
+    
+    public boolean estaVazia() {
+        return primeiro == null;
+    }
+}
+
+//Inserir do inicio 
+
+public void inserirNoInicio(int dado) {
+    NoDuplo novoNo = new NoDuplo(dado);
+    
+    if (estaVazia()) {
+        // Lista vazia: primeiro E último apontam para o novo nó
+        primeiro = novoNo;
+        ultimo = novoNo;
+    } else {
+        // Lista não vazia: insere no início
+        novoNo.proximo = primeiro;  // Novo aponta para o antigo primeiro
+        primeiro.anterior = novoNo; // ⭐ Antigo primeiro aponta para trás
+        primeiro = novoNo;          // Atualiza o primeiro
+    }
+}
+
+//Mostrar do inicio 
+
+public void mostrarDoInicio() {
+    if (estaVazia()) {
+        System.out.println("Lista vazia! -> null");
+        return;
+    }
+    
+    NoDuplo atual = primeiro;
+    while (atual != null) {
+        // Mostra o nó atual e suas conexões
+        String anteriorStr = (atual.anterior != null) ? 
+                            "[" + atual.anterior.dado + "]" : "null";
+        String proximoStr = (atual.proximo != null) ? 
+                           "[" + atual.proximo.dado + "]" : "null";
+        
+        System.out.println(anteriorStr + " ← [" + atual.dado + "] → " + proximoStr);
+        
+        atual = atual.proximo;
+    }
+    System.out.println("null");
+}
+```
+
+exercício 11.
+
+Implementar mostrarDoFim(): Na sua ListaDuplamenteLigada, crie um método
+public void mostrarDoFim() que use a referência anterior para percorrer e imprimir a
+lista de trás para a frente.
+
+```java
+public void mostrarDoFim() {
+    if (estaVazia()) {
+        System.out.println("Lista vazia! -> null");
+        return;
+    }
+    
+    NoDuplo atual = ultimo;
+    System.out.print("null ← ");
+    while (atual != null) {
+        System.out.print("[" + atual.dado + "]");
+        atual = atual.anterior;
+        if (atual != null) {
+            System.out.print(" ← ");
+        }
+    }
+    System.out.println();
+}
+```
+
+exercício 12. 
+
+Desafio - Inverter a Lista: Crie um método na ListaLigada simples (public void
+inverter()) que inverta a ordem dos nós da lista sem criar uma nova lista. (Dica:
+você precisará de três referências: anterior, atual e proximo)
+
+```java
+public void inverter() {
+    if (primeiro == null || primeiro.proximo == null) {
+        System.out.println("Lista muito pequena para inverter");
+        return;
+    }
+    
+    No anterior = null;
+    No atual = primeiro;
+    No proximo = null;
+    int passo = 0;
+    
+    System.out.println("ANTES: " + mostrarListaComoString());
+    
+    while (atual != null) {
+        passo++;
+        proximo = atual.proximo;
+        atual.proximo = anterior;
+        
+        System.out.println("Passo " + passo + ":");
+        System.out.println("  anterior: " + (anterior != null ? anterior.dado : "null"));
+        System.out.println("  atual: " + atual.dado);
+        System.out.println("  proximo: " + (proximo != null ? proximo.dado : "null"));
+        
+        anterior = atual;
+        atual = proximo;
+    }
+    
+    primeiro = anterior;
+    System.out.println("DEPOIS: " + mostrarListaComoString());
+}
+```
+
+exercício 13, 14 e 15
+
+Criar a Classe PilhaLigada: Crie uma classe PilhaLigada. Internamente, ela deve
+usar uma ListaLigada (pode ser a que você já criou) para armazenar os dados.
+
+```java
+public class PilhaLigada {
+    private ListaLigada lista;
+    public PilhaLigada() {
+        this.lista = new ListaLigada();
+    }
+    
+    //inserir no inicio 
+    public void push(int dado) {
+        lista.inserirNoInicio(dado);
+    }
+    
+    // remover do inicio 
+    public int pop() {
+        No removido = lista.removerDoInicio();
+        return removido.dado;
+    }
+}
+```
+
+exercício 16.
+
+Implementar peek() e isEmpty(): Crie o método peek que apenas "espia" o valor
+no topo sem removê-lo, e o método isEmpty que verifica se a pilha está vazia
+
+```java
+//metodo peek
+
+public int peek() {
+    if (isEmpty()) {
+        System.out.println("Pilha vazia! Não tem topo.");
+        return -1;
+    }
+    return lista.primeiro.dado;
+}
+
+//metodo isEmpty na pilha 
+public boolean isEmpty() {
+    return lista.estaVazia();
+}
+//como é o metodo na lista? 
+public boolean estaVazia() {
+    return primeiro == null;  // ← Isso é uma PERGUNTA!
+}
+
+```
+
+exercicio 17. 
+
+Criar a Classe FilaLigada: Crie uma classe FilaLigada. Internamente, ela deve
+usar uma ListaLigada com referências para primeiro e último (a lista com
+extremidade dupla do exercício 8).
+
+```java
+public class FilaLigada {
+    private ListaLigada lista;
+    
+    public FilaLigada() {
+        this.lista = new ListaLigada();
+    }
+}
+
+//como esta a classe lista ligada 
+public class ListaLigada {
+    private No primeiro;
+    private No ultimo;  //  NOVA referência ao último nó
+    
+    // Construtor atualizado
+    public ListaLigada() {
+        this.primeiro = null;
+        this.ultimo = null;  // Inicializa ultimo como null
+    }
+}
+
+```
+
+exercicio 18. 
+
+.Implementar enqueue(int dado) (Enfileirar): Crie o método enqueue que
+adiciona um elemento no fim da fila. Ele deve usar o método inserirNoFim() da sua
+lista ligada interna para garantir uma performance O(1)
+
+```java
+public void enqueue(int dado) {
+    lista.inserirNoFim(dado);
+}
+
+//na lista ligada, ha esse metodo 
+
+public void inserirNoFim(int dado) {
+    No novoNo = new No(dado);  // Cria o novo nó
+    
+    if (primeiro == null) {
+        // Lista vazia: primeiro E último apontam para o novo nó
+        primeiro = novoNo;
+        ultimo = novoNo;
+    } else {
+        // Lista não vazia: insere no fim em O(1)
+        ultimo.proximo = novoNo;  // Último atual aponta para o novo
+        ultimo = novoNo;          // Atualiza último para ser o novo nó
+    }
+}
+```
+
+exercicio 19.
+
+.Implementar dequeue() (Desenfileirar): Crie o método dequeue que remove e
+retorna o elemento do início da fila. Ele deve usar o método removerDoInicio() da
+sua lista
+
+```java
+public int dequeue() {
+    if (lista.estaVazia()) {
+        System.out.println("Fila vazia! Não pode desenfileirar.");
+        return -1;
+    }
+    
+    No removido = lista.removerDoInicio();
+    return removido.dado;
+}
+```
+
+exercicio 20.
+
+Implementar peek() e isEmpty(): Crie os métodos peek (para ver o primeiro da
+fila) e isEmpty para a sua FilaLigada
+
+public int peek() {
+    if (isEmpty()) {
+        System.out.println("Fila vazia! Não tem primeiro elemento.");
+        return -1;
+    }
+    return lista.primeiro.dado;
+}
+
+public boolean isEmpty() {
+    return lista.estaVazia();
+}
