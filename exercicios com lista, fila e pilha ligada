@@ -1,6 +1,6 @@
 // alguns exercicios 
 
-exercício 6. 
+exercício 6.
 
 Implementar buscar(int chave): Crie um método public No buscar(int chave) que
 percorra a lista e retorne o nó que contém o valor da chave. Se não encontrar, deve
